@@ -1,0 +1,1 @@
+A Django app to help you learn with flashcards

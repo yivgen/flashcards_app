@@ -1,1 +1,1 @@
-A Django app to help you learn with flashcards
+A Django/NextJS app to help you learn with flashcards

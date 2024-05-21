@@ -113,10 +113,8 @@ main {
 .decks {
   justify-content: center;
   padding-top: 2rem;
-  padding-left: 25%;
-  padding-right: 25%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, auto);
   column-gap: 1rem;
   row-gap: 0.5rem;
 }
@@ -124,8 +122,9 @@ main {
 .deck {
   border: 3px solid #797979;
   border-radius: 5px;
-  height: 4rem;
-  font-size: 20px;
+  width: 350px;
+  height: 200px;
+  font-size: 23px;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -134,9 +133,50 @@ main {
   cursor: pointer;
 }
 
-.add-deck {
+.add-deck-btn {
   border-color: rgba(255, 255, 255, 0);
   background-color: #ededed;
+}
+
+.add-deck-input {
+  font: inherit;
+}
+
+.add-deck > .apply-btn {
+  position: absolute;
+}
+
+.add-deck-form {
+  position: relative;
+  border: 3px solid #797979;
+  border-radius: 5px;
+  width: 350px;
+  height: 200px;
+  font-size: 23px;
+}
+
+.add-deck-input-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-deck-form > .apply-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 13px;
+  width: 30px;
+  height: 30px;
+}
+
+.add-deck-form > .close-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 13px;
+  width: 30px;
+  height: 30px;
 }
 
 .dialog-container {
@@ -145,7 +185,7 @@ main {
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   z-index: 9999;
-  border: 2px solid #7e7e7e;
+  border: 4px solid #7e7e7e;
   border-radius: 5px;
 }
 
@@ -168,8 +208,7 @@ main {
   font-weight: bold;
   background-color: #ff8383;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 50px;
   border-radius: 3px;
   cursor: pointer;
 }
@@ -182,11 +221,17 @@ main {
   display: grid;
   font-size: 20px;
   grid-template-columns: auto 1fr;
+  row-gap: 5px;
   column-gap: 10px;
 }
 
 .dialog-input>input {
   padding: 3px;
+}
+
+.dialog-input>textarea {
+  font-size: 20px;
+  resize: vertical;
 }
 
 .dialog-ok {
@@ -202,4 +247,118 @@ main {
   border: none;
   border-radius: 3px;
   cursor: pointer;
+}
+
+#content {
+  padding-left: 25%;
+  padding-right: 25%;
+}
+
+.deck-header {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  align-items: center;
+  column-gap: 15px;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: left;
+}
+
+.editable-header {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 15px;
+  justify-items: center;
+  align-items: center;
+}
+.btn {
+  cursor: pointer;
+}
+
+.edit-btn {
+  color: gray;
+}
+.close-btn {
+  color: #ff2222;
+}
+.apply-btn {
+  color: #75ad2d;
+}
+
+.add-btn {
+  color: #75ad2d;
+}
+
+.delete-btn {
+  color: #eb1212;
+}
+
+h1 > input {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.edit-btn>svg {
+  height: 70%;
+}
+
+.deck-cards>.deck-card:first-child {
+  border-top: none;
+}
+
+.deck-card {
+  border: solid #797979;
+  border-width: 1px 0 0 0;
+  padding: 20px;
+  font-size: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 20px 20px;
+  column-gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.deck-card > textarea {
+  font: inherit;
+  resize: none;
+  height: 150px;
+}
+
+.deck-card > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-btns {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+  justify-content: left;
+  padding-top: 5px;
+}
+
+.deck-btn {
+  padding: 5px 8px;
+  font-size: 20px;
+  font-weight: 500;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 5px;
+  justify-content: center;
+  align-content: center;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.add-card-btn {
+  border: 2px solid #114b24;
+  background-color: #47912d;
+  color: white;
+}
+
+.edit-deck-btn {
+  border: 2px solid #00444e;
+  background-color: #2a91a8;
+  color: white;
 }

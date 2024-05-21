@@ -6,4 +6,5 @@ urlpatterns = [
     path('flashcards/<int:pk>/', views.FlashcardDetail.as_view()),
     path('decks/list/', views.DeckList.as_view()),
     path('decks/<int:pk>/', views.DeckDetail.as_view()),
+    path('decks/<int:pk>/add_flashcard/', views.CreateFlashcardForDeck.as_view()),
 ]

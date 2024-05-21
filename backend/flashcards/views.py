@@ -1,6 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, mixins
 from flashcards.models import Flashcard, Deck
-from flashcards.serializers import FlashcardSerializer, DeckRetrieveSerializer, DeckUpdateSerializer
+from flashcards.serializers import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class FlashcardList(generics.ListCreateAPIView):
@@ -17,4 +20,24 @@ class DeckList(generics.ListCreateAPIView):
 
 class DeckDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Deck.objects.all()
-    serializer_class = DeckUpdateSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return DeckRetrieveSerializer
+        return DeckUpdateSerializer
+
+class CreateFlashcardForDeck(APIView):
+    def post(self, request, pk, *args, **kwargs):
+        try:
+            deck = Deck.objects.get(pk=pk)
+        except Deck.DoesNotExist:
+            return Response("Deck doesn't exist", status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = FlashcardSerializer(data=request.data)
+        if serializer.is_valid():
+            flashcard = serializer.save()
+            deck.flashcards.add(flashcard)
+            deck.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

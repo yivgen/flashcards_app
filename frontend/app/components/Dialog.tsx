@@ -1,18 +1,23 @@
 "use client"
-import { useSearchParams } from "@/node_modules/next/navigation";
+
+import { useSearchParams, usePathname } from "@/node_modules/next/navigation";
 import { useEffect, useRef } from "react";
+import { useRouter } from '@/node_modules/next/navigation';
 
 type Props = {
+    urlParamName: string,
     title: string,
     onClose: () => void,
     onOk: () => void,
     children: React.ReactNode,
 }
 
-export default function Dialog({ title, onClose, onOk, children }: Props) {
+export default function Dialog({ urlParamName, title, onClose, onOk, children }: Props) {
+    const router = useRouter();
     const searchParams = useSearchParams();
+    const currentPath = usePathname();
     const dialogRef = useRef<null | HTMLDialogElement>(null);
-    const showDialog = searchParams.get('showDialog')
+    const showDialog = searchParams.get(urlParamName)
     useEffect(() => {
         if (showDialog === 'y') {
             dialogRef.current?.showModal();
@@ -24,6 +29,9 @@ export default function Dialog({ title, onClose, onOk, children }: Props) {
     const closeDialog = () => {
         dialogRef.current?.close();
         onClose();
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete(urlParamName);
+        router.push(currentPath + params.toString());
     }
 
     const clickOk = () => {

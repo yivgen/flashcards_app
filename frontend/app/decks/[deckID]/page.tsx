@@ -3,9 +3,10 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from '../../axios';
 import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faXmark } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
+import { faPlus, faCheck, faXmark, faPlay } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
 import EditableHeader from '@/app/components/EditableHeader';
 import EditableCard from '@/app/components/EditableCard';
+import Link from '@/node_modules/next/link';
 
 
 type Card = {
@@ -15,7 +16,7 @@ type Card = {
 }
 
 export default function Page() {
-    const params = useParams<{ deckID: string }>()
+    const params = useParams<{ deckID: string }>();
     const [name, setName] = useState('');
     const [flashcards, setFlashcards] = useState([]);
     const [isAddingCard, setIsAddingCard] = useState(false);
@@ -65,6 +66,14 @@ export default function Page() {
         <div>
             <div className='deck-header'>
                 <EditableHeader onChange={changeDeckName} value={name} />
+                {flashcards.length
+                    ? (
+                        <Link className="learn-btn" href={`/decks/${params.deckID}/learn/`}>
+                            Learn
+                            &nbsp;
+                            <FontAwesomeIcon icon={faPlay}/>
+                        </Link>
+                    ) : null}
             </div>
             <div className='deck-cards'>
                 <div className="deck-card">

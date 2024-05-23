@@ -146,6 +146,14 @@ main {
   position: absolute;
 }
 
+.learn-btn {
+  border: 1px solid #2cab00;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #00db45;
+  font-weight: bold;
+}
+
 .add-deck-form {
   position: relative;
   border: 3px solid #797979;
@@ -361,4 +369,87 @@ h1 > input {
   border: 2px solid #00444e;
   background-color: #2a91a8;
   color: white;
+}
+
+.card-wrapper {
+  background-color: transparent;
+  width: 100%;
+  aspect-ratio: 16/9;
+  perspective: 10000px;
+  padding-top: 30px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  justify-content: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+.card-wrapper.flipped .card {
+  transform: rotateY(180deg);
+}
+
+.question, .answer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 7px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: 10px;
+  justify-items: center;
+  align-items: center;
+  padding: 20px 60px;
+  text-wrap: balance;
+}
+
+.question > p, .answer > p {
+  font-size: 20px;
+}
+
+.answer {
+  transform: rotateY(180deg);
+}
+
+.carousel-btns {
+  margin-top: 15px;
+  height: 50px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-items: center;
+  align-items: center;
+}
+
+.carousel-btn {
+  height: inherit;
+  color: gray;
+  cursor: pointer;
+}
+
+.disabled {
+  color:#c8c8c8;
+  cursor: default;
+}
+
+.carousel-counter {
+  font-size: 20px;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }

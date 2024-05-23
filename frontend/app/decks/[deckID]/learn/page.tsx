@@ -1,0 +1,89 @@
+'use client'
+import { useParams } from '@/node_modules/next/navigation';
+import axios from '../../../axios';
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome';
+import { faLeftLong, faRightLong } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
+
+type Card = {
+    id: number,
+    question: string,
+    answer: string
+}
+
+function shuffleArray(array: Array<any>) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+export default function Page() {
+    const params = useParams<{ deckID: string }>();
+    const [flashcards, setFlashcards] = useState<Card[]>([]);
+    const [currentCardIdx, setCurrentCardIdx] = useState(0);
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    const getDeck = () => {
+        axios.get(`/api/decks/${params.deckID}/`).then(
+            (res: any) => {
+                let newFlashcards = res?.data?.flashcards;
+                shuffleArray(newFlashcards);
+                setFlashcards(newFlashcards);
+            }
+        );
+    }
+
+    useEffect(() => {
+        getDeck();
+    }, []);
+
+    const goToPreviosCard = () => {
+        if (currentCardIdx > 0) {
+            setIsFlipped(false);
+            setCurrentCardIdx(currentCardIdx - 1);
+        }
+    }
+
+    const goToNextCard = () => {
+        if (currentCardIdx < flashcards.length - 1) {
+            setIsFlipped(false);
+            setCurrentCardIdx(currentCardIdx + 1);
+        }
+    }
+
+    return (
+        flashcards.length
+            ? (
+                <div className="card-carousel">
+                    <div className={`card-wrapper ${isFlipped ? 'flipped' : ''}`}>
+                        <div className="card" onClick={() => setIsFlipped(!isFlipped)}>
+                            <div className="question">
+                                <h3 className='no-select'>Question</h3>
+                                <p>{flashcards[currentCardIdx].question}</p>
+                            </div>
+                            <div className="answer">
+                                <h3 className='no-select'>Answer</h3>
+                                <p>{flashcards[currentCardIdx].answer}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="carousel-btns">
+                        <FontAwesomeIcon 
+                            onClick={goToPreviosCard} 
+                            className={`carousel-btn ${currentCardIdx == 0 ? 'disabled' : ''}`}
+                            icon={faLeftLong}
+                        />
+                        <div className="carousel-counter no-select">
+                            {currentCardIdx + 1}/{flashcards.length}
+                        </div>
+                        <FontAwesomeIcon 
+                            onClick={goToNextCard} 
+                            className={`carousel-btn ${currentCardIdx == flashcards.length - 1 ? 'disabled' : ''}`}
+                            icon={faRightLong}
+                        />
+                    </div>
+                </div>
+            ) : <div>This deck has no cards in it.</div>
+    )
+}

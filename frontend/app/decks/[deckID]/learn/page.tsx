@@ -4,12 +4,8 @@ import axios from '../../../axios';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome';
 import { faLeftLong, faRightLong } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
-
-type Card = {
-    id: number,
-    question: string,
-    answer: string
-}
+import CardPreview from '@/app/components/CardPreview';
+import { Card } from '@/app/types/Card';
 
 function shuffleArray(array: Array<any>) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -56,18 +52,7 @@ export default function Page() {
         flashcards.length
             ? (
                 <div className="card-carousel">
-                    <div className={`card-wrapper ${isFlipped ? 'flipped' : ''}`}>
-                        <div className="card" onClick={() => setIsFlipped(!isFlipped)}>
-                            <div className="question">
-                                <h3 className='no-select'>Question</h3>
-                                <p>{flashcards[currentCardIdx].question}</p>
-                            </div>
-                            <div className="answer">
-                                <h3 className='no-select'>Answer</h3>
-                                <p>{flashcards[currentCardIdx].answer}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <CardPreview card={flashcards[currentCardIdx]}/>
                     <div className="carousel-btns">
                         <FontAwesomeIcon 
                             onClick={goToPreviosCard} 

@@ -4,7 +4,11 @@ export default function Layout({ children }) {
   return (
     <main>
       <Navbar />
-      <div id='content'>{children}</div>
+      <div id='content-wrapper'>
+        <div id='content'>
+          {children}
+        </div>
+      </div>
     </main>
   )
 }

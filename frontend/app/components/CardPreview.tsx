@@ -1,20 +1,27 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Card } from "../types/Card";
 
 type Props = {
-    card: Card
+    card: Card,
+    show: boolean
 }
 
-export default function CardPreview({card}: Props) {
+export default function CardPreview({card, show}: Props) {
     const [isFlipped, setIsFlipped] = useState(false);
+    const cardRef = useRef(document.createElement("div"));
 
     useEffect(() => {
         setIsFlipped(false);
-    }, [card])
+    }, [card, show])
+
+    useEffect(() => {
+        if (show)
+            cardRef.current.scrollIntoView();
+    })
 
     return (
-        <div className={`card-wrapper ${isFlipped ? 'flipped' : ''}`}>
+        <div ref={cardRef} className={`card-wrapper ${isFlipped ? 'flipped' : ''}`}>
             <div className="card" onClick={() => setIsFlipped(!isFlipped)}>
                 <div className="question">
                     <h2 className='no-select'>Question</h2>

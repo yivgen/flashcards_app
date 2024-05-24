@@ -18,7 +18,6 @@ export default function Page() {
     const params = useParams<{ deckID: string }>();
     const [flashcards, setFlashcards] = useState<Card[]>([]);
     const [currentCardIdx, setCurrentCardIdx] = useState(0);
-    const [isFlipped, setIsFlipped] = useState(false);
 
     const getDeck = () => {
         axios.get(`/api/decks/${params.deckID}/`).then(
@@ -36,14 +35,12 @@ export default function Page() {
 
     const goToPreviosCard = () => {
         if (currentCardIdx > 0) {
-            setIsFlipped(false);
             setCurrentCardIdx(currentCardIdx - 1);
         }
     }
 
     const goToNextCard = () => {
         if (currentCardIdx < flashcards.length - 1) {
-            setIsFlipped(false);
             setCurrentCardIdx(currentCardIdx + 1);
         }
     }
@@ -52,7 +49,9 @@ export default function Page() {
         flashcards.length
             ? (
                 <div className="card-carousel">
-                    <CardPreview card={flashcards[currentCardIdx]}/>
+                    <div className="cards">
+                        {flashcards.map((card, idx) => <CardPreview show={currentCardIdx === idx} key={card.id} card={card}/>)}
+                    </div>
                     <div className="carousel-btns">
                         <FontAwesomeIcon 
                             onClick={goToPreviosCard} 

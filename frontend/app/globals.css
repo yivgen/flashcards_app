@@ -333,6 +333,7 @@ h1 > input {
   font: inherit;
   resize: none;
   height: 150px;
+  padding: 5px;
 }
 
 .deck-card > div {

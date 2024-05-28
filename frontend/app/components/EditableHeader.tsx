@@ -30,7 +30,15 @@ export default function EditableHeader({value, maxLength, onChange: onApply}: Pr
 
     return isEditing ? (
         <div className="editable-header">
-            <h1><input type="text" maxLength={maxLength} value={newValue} onChange={e => setNewValue(e.target.value)}/></h1>
+            <h1>
+                <input 
+                    type="text" 
+                    maxLength={maxLength} 
+                    value={newValue} 
+                    onChange={e => setNewValue(e.target.value)} 
+                    spellCheck='false'
+                />
+            </h1>
             <FontAwesomeIcon className="apply-btn btn" icon={faCheck} onClick={handleApply}/>
             <FontAwesomeIcon className="close-btn btn" icon={faXmark} onClick={handleClose}/>
         </div>

@@ -38,6 +38,8 @@ export default function Page() {
 
     const closeAddCard = () => {
         setIsAddingCard(false);
+        setNewQuestion('');
+        setNewAnswer('');
     }
 
     const addCard = () => {
@@ -79,8 +81,8 @@ export default function Page() {
                 {isAddingCard
                     ? (
                         <div className="deck-card">
-                            <textarea placeholder='How to say "hello" in Spanish?' onChange={(e) => setNewQuestion(e.target.value)}>{newQuestion}</textarea >
-                            <textarea placeholder='Hola' onChange={(e) => setNewAnswer(e.target.value)}>{newAnswer}</textarea>
+                            <textarea placeholder='How to say "hello" in Spanish?' onChange={(e) => setNewQuestion(e.target.value)} spellCheck='false'>{newQuestion}</textarea >
+                            <textarea placeholder='Hola' onChange={(e) => setNewAnswer(e.target.value)} spellCheck='false'>{newAnswer}</textarea>
                             <FontAwesomeIcon className="apply-btn btn" icon={faCheck} onClick={addCard} />
                             <FontAwesomeIcon className="close-btn btn" icon={faXmark} onClick={closeAddCard} />
                         </div>

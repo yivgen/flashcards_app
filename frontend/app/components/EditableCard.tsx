@@ -47,8 +47,8 @@ export default function EditableCard({card, onChange: onChange}: Props) {
 
     return isEditing ? (
         <div className="deck-card">
-            <textarea onChange={(e) => setNewQuestion(e.target.value)}>{newQuestion}</textarea >
-            <textarea onChange={(e) => setNewAnswer(e.target.value)}>{newAnswer}</textarea>
+            <textarea onChange={(e) => setNewQuestion(e.target.value)} spellCheck='false'>{newQuestion}</textarea >
+            <textarea onChange={(e) => setNewAnswer(e.target.value)} spellCheck='false'>{newAnswer}</textarea>
             <FontAwesomeIcon className="apply-btn btn" icon={faCheck} onClick={handleApply}/>
             <FontAwesomeIcon className="close-btn btn" icon={faXmark} onClick={handleClose}/>
         </div>

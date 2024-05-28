@@ -59,7 +59,7 @@ export default function Page() {
     return (
         <div>
             <div className='deck-header'>
-                <EditableHeader onChange={changeDeckName} value={name} />
+                <EditableHeader onChange={changeDeckName} value={name} maxLength={150} />
                 {flashcards.length
                     ? (
                         <Link className="learn-btn" href={`/decks/${params.id}/learn/`}>

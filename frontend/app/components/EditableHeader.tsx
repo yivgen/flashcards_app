@@ -6,10 +6,11 @@ import { useState } from "react"
 
 type Props = {
     value: string,
+    maxLength?: number,
     onChange: (newValue:string) => void
 }
 
-export default function EditableHeader({value, onChange: onApply}: Props) {
+export default function EditableHeader({value, maxLength, onChange: onApply}: Props) {
     const [newValue, setNewValue] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const handleEdit = () => {
@@ -29,7 +30,7 @@ export default function EditableHeader({value, onChange: onApply}: Props) {
 
     return isEditing ? (
         <div className="editable-header">
-            <h1><input type="text" value={newValue} onChange={e => setNewValue(e.target.value)}/></h1>
+            <h1><input type="text" maxLength={maxLength} value={newValue} onChange={e => setNewValue(e.target.value)}/></h1>
             <FontAwesomeIcon className="apply-btn btn" icon={faCheck} onClick={handleApply}/>
             <FontAwesomeIcon className="close-btn btn" icon={faXmark} onClick={handleClose}/>
         </div>

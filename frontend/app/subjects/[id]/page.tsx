@@ -58,7 +58,7 @@ export default function Page() {
     return (
         <div>
             <div className='deck-header'>
-                <EditableHeader onChange={changeDeckName} value={name} />
+                <EditableHeader onChange={changeDeckName} value={name} maxLength={150} />
                 {decks.reduce((acc:number, deck:Deck) => acc + deck.flashcards.length, 0)
                     ? (
                         <Link className="learn-btn" href={`/subjects/${params.id}/learn/`}>
@@ -85,6 +85,7 @@ export default function Page() {
                             <input
                                 placeholder='Subject name'
                                 className='add-deck-input'
+                                maxLength={150}
                                 type="text"
                                 onChange={(e) => setNewDeckName(e.target.value)}
                             />

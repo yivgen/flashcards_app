@@ -57,6 +57,7 @@ export default function Page() {
                                 placeholder='Deck name'
                                 className='add-deck-input'
                                 type="text"
+                                maxLength={150}
                                 onChange={(e) => setNewDeckName(e.target.value)}
                             />
                         </div>

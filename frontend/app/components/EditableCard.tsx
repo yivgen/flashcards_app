@@ -4,12 +4,7 @@ import { faCheck, faPenToSquare, faXmark, faTrash } from "@/node_modules/@fortaw
 import { FontAwesomeIcon } from "@/node_modules/@fortawesome/react-fontawesome/index"
 import { useState } from "react"
 import axios from '../axios';
-
-type Card = {
-    id: number,
-    question: string,
-    answer: string
-}
+import { Card } from "../types/types";
 
 type Props = {
     card: Card,

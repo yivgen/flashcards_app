@@ -2,10 +2,10 @@
 import { useParams } from '@/node_modules/next/navigation';
 import axios from '../../../axios';
 import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome/index';
 import { faLeftLong, faRightLong } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
 import CardPreview from '@/app/components/CardPreview';
-import { Card } from '@/app/types/Card';
+import { Deck, Card } from '@/app/types/types';
 
 function shuffleArray(array: Array<any>) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -15,14 +15,16 @@ function shuffleArray(array: Array<any>) {
 }
 
 export default function Page() {
-    const params = useParams<{ deckID: string }>();
+    const params = useParams<{ id: string }>();
     const [flashcards, setFlashcards] = useState<Card[]>([]);
     const [currentCardIdx, setCurrentCardIdx] = useState(0);
 
     const getDeck = () => {
-        axios.get(`/api/decks/${params.deckID}/`).then(
+        axios.get(`/api/subjects/${params.id}/`).then(
             (res: any) => {
-                let newFlashcards = res?.data?.flashcards;
+                let newFlashcards = res?.data?.decks.reduce((cards: Card[], deck: Deck) => {
+                    return cards.concat(deck.flashcards);
+                }, []);
                 shuffleArray(newFlashcards);
                 setFlashcards(newFlashcards);
             }
@@ -68,6 +70,6 @@ export default function Page() {
                         />
                     </div>
                 </div>
-            ) : <div>This deck has no cards in it.</div>
+            ) : <div>This subject has no decks.</div>
     )
 }

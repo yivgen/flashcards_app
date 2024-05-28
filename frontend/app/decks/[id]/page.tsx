@@ -1,22 +1,16 @@
 'use client'
-import { useParams } from 'next/navigation';
+import { useParams } from '@/node_modules/next/navigation';
 import { useEffect, useState } from 'react';
 import axios from '../../axios';
-import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome/index';
 import { faPlus, faCheck, faXmark, faPlay } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
 import EditableHeader from '@/app/components/EditableHeader';
 import EditableCard from '@/app/components/EditableCard';
 import Link from '@/node_modules/next/link';
-
-
-type Card = {
-    id: number,
-    question: string,
-    answer: string
-}
+import { Card } from '@/app/types/types';
 
 export default function Page() {
-    const params = useParams<{ deckID: string }>();
+    const params = useParams<{ id: string }>();
     const [name, setName] = useState('');
     const [flashcards, setFlashcards] = useState([]);
     const [isAddingCard, setIsAddingCard] = useState(false);
@@ -24,7 +18,7 @@ export default function Page() {
     const [newAnswer, setNewAnswer] = useState('');
 
     const updateDeck = () => {
-        axios.get(`/api/decks/${params.deckID}/`).then(
+        axios.get(`/api/decks/${params.id}/`).then(
             (res: any) => {
                 setName(res?.data?.name);
                 setFlashcards(res?.data?.flashcards);
@@ -33,7 +27,7 @@ export default function Page() {
     }
 
     const changeDeckName = (name: string) => {
-        axios.put(`/api/decks/${params.deckID}/`, {
+        axios.put(`/api/decks/${params.id}/`, {
             'name': name
         }).then(
             (res: any) => {
@@ -48,7 +42,7 @@ export default function Page() {
 
     const addCard = () => {
         closeAddCard();
-        axios.post(`/api/decks/${params.deckID}/add_flashcard/`, {
+        axios.post(`/api/decks/${params.id}/add_flashcard/`, {
             'question': newQuestion,
             'answer': newAnswer,
         }).then(
@@ -68,7 +62,7 @@ export default function Page() {
                 <EditableHeader onChange={changeDeckName} value={name} />
                 {flashcards.length
                     ? (
-                        <Link className="learn-btn" href={`/decks/${params.deckID}/learn/`}>
+                        <Link className="learn-btn" href={`/decks/${params.id}/learn/`}>
                             Learn
                             &nbsp;
                             <FontAwesomeIcon icon={faPlay}/>

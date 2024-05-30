@@ -5,13 +5,15 @@ import { FontAwesomeIcon } from "@/node_modules/@fortawesome/react-fontawesome/i
 import { useState } from "react"
 import axios from '../axios';
 import { Card } from "../types/types";
+import Dialog from "./Dialog";
 
 type Props = {
     card: Card,
-    onChange: () => void
+    onChange: () => void,
+    handleDelete: (card: Card) => void
 }
 
-export default function EditableCard({card, onChange: onChange}: Props) {
+export default function EditableCard({card, onChange, handleDelete}: Props) {
     const [newQuestion, setNewQuestion] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
     const [isEditing, setIsEditing] = useState(false);
@@ -35,15 +37,6 @@ export default function EditableCard({card, onChange: onChange}: Props) {
         })
     }
 
-    const handleDelete = () => {
-        handleClose();
-        axios.delete(`/api/flashcards/${card.id}/`).then(
-            (res:any) => {
-                onChange();
-            }
-        )
-    }
-
 
     return isEditing ? (
         <div className="deck-card">
@@ -57,7 +50,7 @@ export default function EditableCard({card, onChange: onChange}: Props) {
             <div>{card.question}</div>
             <div>{card.answer}</div>
             <FontAwesomeIcon className="edit-btn btn" icon={faPenToSquare} onClick={handleEdit}/>
-            <FontAwesomeIcon className="delete-btn btn" icon={faTrash} onClick={handleDelete}/>
+            <FontAwesomeIcon className="delete-btn btn" icon={faTrash} onClick={() => handleDelete(card)}/>
         </div>
     )
 }

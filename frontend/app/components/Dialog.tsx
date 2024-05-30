@@ -1,57 +1,46 @@
 "use client"
 
-import { useSearchParams, usePathname } from "@/node_modules/next/navigation";
-import { useEffect, useRef } from "react";
-import { useRouter } from '@/node_modules/next/navigation';
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
-    urlParamName: string,
-    title: string,
+    prompt: string,
     onClose: () => void,
     onOk: () => void,
-    children: React.ReactNode,
 }
 
-export default function Dialog({ urlParamName, title, onClose, onOk, children }: Props) {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const currentPath = usePathname();
+export default function Dialog({ prompt, onClose, onOk }: Props) {
+    const [showDialog, setShowDialog] = useState(true);
     const dialogRef = useRef<null | HTMLDialogElement>(null);
-    const showDialog = searchParams.get(urlParamName)
+
     useEffect(() => {
-        if (showDialog === 'y') {
+        if (showDialog) {
             dialogRef.current?.showModal();
         } else {
             dialogRef.current?.close();
         }
     }, [showDialog])
 
-    const closeDialog = () => {
-        dialogRef.current?.close();
+    const handleClose = () => {
+        setShowDialog(false);
         onClose();
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete(urlParamName);
-        router.push(currentPath + params.toString());
     }
 
-    const clickOk = () => {
+    const handleOk = () => {
+        handleClose();
         onOk();
-        closeDialog();
     }
 
-    const dialog: JSX.Element | null = showDialog === 'y' ? 
+
+    const dialog: JSX.Element | null = showDialog ? 
         (   
-            <dialog className="dialog-container" ref={dialogRef}>
+            <dialog className="dialog-container" ref={dialogRef} onClose={handleClose}>
                 <div className="dialog">
                     <div className="dialog-title">
-                        <h1>{title}</h1>
-                        <button className="close-dialog-btn" onClick={closeDialog}>X</button>
+                        <h2>{prompt}</h2>
                     </div>
-                    <div className="dialog-content">
-                        {children}
-                    </div>
-                    <div className="dialog-ok">
-                        <button onClick={clickOk}>OK</button>
+                    <div className="dialog-btns">
+                        <button className="cancel-btn" onClick={handleClose}>No</button>
+                        <button className="confirm-btn" onClick={handleOk}>Yes</button>
                     </div>
                 </div>
             </dialog>

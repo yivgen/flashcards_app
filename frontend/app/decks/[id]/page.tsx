@@ -8,6 +8,7 @@ import EditableHeader from '@/app/components/EditableHeader';
 import EditableCard from '@/app/components/EditableCard';
 import Link from '@/node_modules/next/link';
 import { Card } from '@/app/types/types';
+import Dialog from '@/app/components/Dialog';
 
 export default function Page() {
     const params = useParams<{ id: string }>();
@@ -16,6 +17,8 @@ export default function Page() {
     const [isAddingCard, setIsAddingCard] = useState(false);
     const [newQuestion, setNewQuestion] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
+    const [isDeletingCard, setIsDeletingCard] = useState(false);
+    const [cardToDelete, setCardToDelete] = useState<null | Card>(null);
 
     const updateDeck = () => {
         axios.get(`/api/decks/${params.id}/`).then(
@@ -58,6 +61,26 @@ export default function Page() {
         updateDeck();
     }, []);
 
+    const deleteCard = () => {
+        if (cardToDelete) {
+            axios.delete(`/api/flashcards/${cardToDelete.id}/`).finally(
+                () => {
+                    setIsDeletingCard(false);
+                    setCardToDelete(null);
+                    updateDeck();
+                }
+            )
+        } else {
+            throw TypeError('cardToDelete is undefined')
+        }
+        
+    }
+
+    const handleDeleteCard = (card: Card) => {
+        setIsDeletingCard(true);
+        setCardToDelete(card);
+    }
+
     return (
         <div>
             <div className='deck-header'>
@@ -90,10 +113,17 @@ export default function Page() {
                 }
                 {flashcards.length
                     ? flashcards.map((card: Card) => (
-                        <EditableCard key={card.id} card={card} onChange={updateDeck} />
+                        <EditableCard key={card.id} card={card} onChange={updateDeck} handleDelete={handleDeleteCard} />
                     )) : isAddingCard
                         ? null
                         : <div className="deck-card">No flashcards yet.</div>}
+                {isDeletingCard && cardToDelete
+                    ? <Dialog 
+                        prompt='Do you want to delete this card?' 
+                        onClose={() => setIsDeletingCard(false)}
+                        onOk={deleteCard}
+                      />
+                    : null}
             </div>
         </div>
     )

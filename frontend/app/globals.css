@@ -484,17 +484,6 @@ h1 > input {
   height: 100%;
   grid-auto-flow: column;
   column-gap: 80px;
-  overflow: auto;
+  overflow: hidden;
   scroll-behavior: smooth;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.cards::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.cards {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
 }

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from flashcards.models import Flashcard, Deck, Subject
+from flashcards.models import Flashcard, Deck
 
 
 class FlashcardSerializer(serializers.ModelSerializer):
@@ -16,15 +16,4 @@ class DeckRetrieveSerializer(serializers.ModelSerializer):
 class DeckUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deck
-        fields = '__all__'
-
-class SubjectRetrieveSerializer(serializers.ModelSerializer):
-    decks = DeckRetrieveSerializer(many=True, read_only=True)
-    class Meta:
-        model = Subject
-        fields = '__all__'
-
-class SubjectUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subject
         fields = '__all__'

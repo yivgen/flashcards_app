@@ -4,6 +4,7 @@ from flashcards.serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.postgres.search import SearchVector
 
 
 class FlashcardList(generics.ListCreateAPIView):
@@ -41,3 +42,12 @@ class CreateFlashcardForDeck(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SearchDeckFlashcards(APIView):
+    def get(self, request, pk, *args, **kwargs):
+        query = request.GET.get('q', '')
+        flashcards = Flashcard.objects.annotate(
+            search=SearchVector("question", "answer")
+        ).filter(deck_set__id=pk, search=query)
+        serializer = FlashcardSerializer(flashcards, many=True)
+        return Response(serializer.data)

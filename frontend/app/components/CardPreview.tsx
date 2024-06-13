@@ -1,6 +1,7 @@
 'use client'
-import { useEffect, useRef, useState } from "react"
-import { Card } from "../types/Card";
+import Markdown from "markdown-to-jsx";
+import { useEffect, useRef, useState } from "react";
+import { Card } from "../types/types";
 
 type Props = {
     card: Card,
@@ -25,11 +26,19 @@ export default function CardPreview({card, show}: Props) {
             <div className="card" onClick={() => setIsFlipped(!isFlipped)}>
                 <div className="question">
                     <h2 className='no-select'>Question</h2>
-                    <p>{card.question}</p>
+                    <p>
+                        <Markdown>
+                            {card.question}
+                        </Markdown>
+                    </p>
                 </div>
                 <div className="answer">
                     <h2 className='no-select'>Answer</h2>
-                    <p>{card.answer}</p>
+                    <p>
+                        <Markdown>
+                            {card.answer}
+                        </Markdown>
+                    </p>
                 </div>
             </div>
         </div>

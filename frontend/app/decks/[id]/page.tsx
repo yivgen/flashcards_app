@@ -87,7 +87,7 @@ export default function Page() {
                 <EditableHeader onChange={changeDeckName} value={name} maxLength={150} />
                 {flashcards.length
                     ? (
-                        <Link className="learn-btn" href={`/decks/${params.id}/learn/`}>
+                        <Link className="learn-btn btn" href={`/decks/${params.id}/learn/`}>
                             Learn
                             &nbsp;
                             <FontAwesomeIcon icon={faPlay}/>

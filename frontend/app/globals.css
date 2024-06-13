@@ -10,11 +10,6 @@ body {
   overflow-x: hidden;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -64,6 +59,8 @@ main {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .add-deck-btn {
@@ -77,14 +74,6 @@ main {
 
 .add-deck > .apply-btn {
   position: absolute;
-}
-
-.learn-btn {
-  border: 1px solid #1d8fb1;
-  border-radius: 5px;
-  padding: 5px 10px;
-  color: #3aafd3;
-  font-weight: bold;
 }
 
 .add-deck-form {
@@ -218,6 +207,8 @@ main {
 }
 .btn {
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .edit-btn {
@@ -236,6 +227,14 @@ main {
 
 .delete-btn {
   color: #eb1212;
+}
+
+.learn-btn {
+  border: 1px solid #1d8fb1;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #3aafd3;
+  font-weight: bold;
 }
 
 h1 > input {
@@ -268,6 +267,7 @@ h1 > input {
   resize: none;
   height: 150px;
   padding: 5px;
+  font-family: monospace;
 }
 
 .deck-card > div {
@@ -321,11 +321,14 @@ h1 > input {
   position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
   justify-content: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
   cursor: pointer;
+}
+
+.card > h1 {
+  text-align: center;
 }
 
 .card-wrapper.flipped .card {
@@ -354,7 +357,6 @@ h1 > input {
   font-size: 22px;
   overflow: auto;
   white-space: pre-line;
-  text-align: center;
   height: 100%;
   width: 100%;
 }
@@ -411,4 +413,10 @@ h1 > input {
   column-gap: 80px;
   overflow: hidden;
   scroll-behavior: smooth;
+}
+
+.question>p *, .answer>p * {
+  padding: revert;
+  margin: revert;
+  text-align: initial;
 }

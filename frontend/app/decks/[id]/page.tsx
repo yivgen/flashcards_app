@@ -9,6 +9,7 @@ import EditableCard from '@/app/components/EditableCard';
 import Link from '@/node_modules/next/link';
 import { Card } from '@/app/types/types';
 import Dialog from '@/app/components/Dialog';
+import CardPreviewDialog from '@/app/components/CardPreviewDialog';
 
 export default function Page() {
     const params = useParams<{ id: string }>();
@@ -19,6 +20,8 @@ export default function Page() {
     const [newAnswer, setNewAnswer] = useState('');
     const [isDeletingCard, setIsDeletingCard] = useState(false);
     const [cardToDelete, setCardToDelete] = useState<null | Card>(null);
+    const [isPreviewingCard, setIsPreviewingCard] = useState(false);
+    const [cardToPreview, setCardToPreview] = useState<null | Card>(null);
 
     const updateDeck = () => {
         axios.get(`/api/decks/${params.id}/`).then(
@@ -81,6 +84,11 @@ export default function Page() {
         setCardToDelete(card);
     }
 
+    const handlePreviewCard = (card: Card) => {
+        setIsPreviewingCard(true);
+        setCardToPreview(card);
+    }
+
     return (
         <div>
             <div className='deck-header'>
@@ -95,7 +103,7 @@ export default function Page() {
                     ) : null}
             </div>
             <div className='deck-cards'>
-                <div className="deck-card">
+                <div className="deck-card deck-card-header">
                     <h3>Question</h3>
                     <h3>Answer</h3>
                     <div></div>
@@ -113,7 +121,13 @@ export default function Page() {
                 }
                 {flashcards.length
                     ? flashcards.map((card: Card) => (
-                        <EditableCard key={card.id} card={card} onChange={updateDeck} handleDelete={handleDeleteCard} />
+                        <EditableCard 
+                            key={card.id} 
+                            card={card} 
+                            onChange={updateDeck} 
+                            handleDelete={handleDeleteCard} 
+                            handlePreview={handlePreviewCard}
+                        />
                     )) : isAddingCard
                         ? null
                         : <div className="deck-card">No flashcards yet.</div>}
@@ -122,6 +136,12 @@ export default function Page() {
                         prompt='Do you want to delete this card?' 
                         onClose={() => setIsDeletingCard(false)}
                         onOk={deleteCard}
+                      />
+                    : null}
+                {isPreviewingCard && cardToPreview
+                    ? <CardPreviewDialog 
+                        card={cardToPreview}
+                        onClose={() => setIsPreviewingCard(false)}
                       />
                     : null}
             </div>

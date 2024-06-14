@@ -1,6 +1,6 @@
 'use client'
 
-import { faCheck, faPenToSquare, faXmark, faTrash } from "@/node_modules/@fortawesome/free-solid-svg-icons/index"
+import { faCheck, faPenToSquare, faXmark, faTrash, faEye } from "@/node_modules/@fortawesome/free-solid-svg-icons/index"
 import { FontAwesomeIcon } from "@/node_modules/@fortawesome/react-fontawesome/index"
 import { useState } from "react"
 import axios from '../axios';
@@ -10,13 +10,15 @@ import Dialog from "./Dialog";
 type Props = {
     card: Card,
     onChange: () => void,
-    handleDelete: (card: Card) => void
+    handleDelete: (card: Card) => void,
+    handlePreview: (card: Card) => void
 }
 
-export default function EditableCard({card, onChange, handleDelete}: Props) {
+export default function EditableCard({card, onChange, handleDelete, handlePreview}: Props) {
     const [newQuestion, setNewQuestion] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+
     const handleEdit = () => {
         setNewQuestion(card.question);
         setNewAnswer(card.answer);
@@ -39,7 +41,7 @@ export default function EditableCard({card, onChange, handleDelete}: Props) {
 
 
     return isEditing ? (
-        <div className="deck-card">
+        <div className="deck-card is-editing">
             <textarea onChange={(e) => setNewQuestion(e.target.value)} spellCheck='false'>{newQuestion}</textarea >
             <textarea onChange={(e) => setNewAnswer(e.target.value)} spellCheck='false'>{newAnswer}</textarea>
             <FontAwesomeIcon className="apply-btn btn" icon={faCheck} onClick={handleApply}/>
@@ -51,6 +53,7 @@ export default function EditableCard({card, onChange, handleDelete}: Props) {
             <div>{card.answer}</div>
             <FontAwesomeIcon className="edit-btn btn" icon={faPenToSquare} onClick={handleEdit}/>
             <FontAwesomeIcon className="delete-btn btn" icon={faTrash} onClick={() => handleDelete(card)}/>
+            <FontAwesomeIcon className="preview-btn btn" icon={faEye} onClick={() => handlePreview(card)}/>
         </div>
     )
 }

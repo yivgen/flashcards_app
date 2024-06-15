@@ -3,7 +3,7 @@ import { useParams } from '@/node_modules/next/navigation';
 import { useEffect, useState } from 'react';
 import axios from '../../axios';
 import { FontAwesomeIcon } from '@/node_modules/@fortawesome/react-fontawesome/index';
-import { faPlus, faCheck, faXmark, faPlay } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
+import { faPlus, faCheck, faXmark, faPlay, faMagnifyingGlass } from '@/node_modules/@fortawesome/free-solid-svg-icons/index';
 import EditableHeader from '@/app/components/EditableHeader';
 import EditableCard from '@/app/components/EditableCard';
 import Link from '@/node_modules/next/link';
@@ -15,6 +15,7 @@ export default function Page() {
     const params = useParams<{ id: string }>();
     const [name, setName] = useState('');
     const [flashcards, setFlashcards] = useState([]);
+    const [totalFlashcardsNumber, setTotalFlashcards] = useState(0);
     const [isAddingCard, setIsAddingCard] = useState(false);
     const [newQuestion, setNewQuestion] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
@@ -22,12 +23,14 @@ export default function Page() {
     const [cardToDelete, setCardToDelete] = useState<null | Card>(null);
     const [isPreviewingCard, setIsPreviewingCard] = useState(false);
     const [cardToPreview, setCardToPreview] = useState<null | Card>(null);
+    const [searchCardsPrompt, setSearchCardsPrompt] = useState("");
 
     const updateDeck = () => {
         axios.get(`/api/decks/${params.id}/`).then(
             (res: any) => {
                 setName(res?.data?.name);
                 setFlashcards(res?.data?.flashcards);
+                setTotalFlashcards(res?.data?.flashcards?.length);
             }
         );
     }
@@ -89,11 +92,28 @@ export default function Page() {
         setCardToPreview(card);
     }
 
+    const searchCards = (prompt: string) => {
+        if (prompt) {
+            axios.get(`/api/decks/${params.id}/search_cards/?q=${searchCardsPrompt}`).then(
+                (res: any) => {
+                    setFlashcards(res?.data);
+                }
+            );
+        } else {
+            updateDeck();
+        }
+    }
+
+
+    useEffect(() => {
+        searchCards(searchCardsPrompt);
+    }, [searchCardsPrompt]);
+
     return (
         <div>
             <div className='deck-header'>
                 <EditableHeader onChange={changeDeckName} value={name} maxLength={150} />
-                {flashcards.length
+                {totalFlashcardsNumber
                     ? (
                         <Link className="learn-btn btn" href={`/decks/${params.id}/learn/`}>
                             Learn
@@ -101,11 +121,25 @@ export default function Page() {
                             <FontAwesomeIcon icon={faPlay}/>
                         </Link>
                     ) : null}
+                {totalFlashcardsNumber
+                    ? (
+                        <div id='deck-search-bar'>
+                            <input 
+                                type="text"
+                                spellCheck='false' 
+                                onChange={(e) => setSearchCardsPrompt(e.target.value)}
+                            />
+                            <button onClick={() => searchCards(searchCardsPrompt)}>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </button>
+                        </div>
+                    ) : null}
             </div>
             <div className='deck-cards'>
-                <div className="deck-card deck-card-header">
+                <div className="deck-card">
                     <h3>Question</h3>
                     <h3>Answer</h3>
+                    <div></div>
                     <div></div>
                     <FontAwesomeIcon className="btn" icon={faPlus} onClick={() => setIsAddingCard(true)} />
                 </div>
@@ -130,7 +164,7 @@ export default function Page() {
                         />
                     )) : isAddingCard
                         ? null
-                        : <div className="deck-card">No flashcards yet.</div>}
+                        : <div className="deck-card">No flashcards found.</div>}
                 {isDeletingCard && cardToDelete
                     ? <Dialog 
                         prompt='Do you want to delete this card?' 

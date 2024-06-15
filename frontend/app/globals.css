@@ -193,7 +193,7 @@ main {
   align-items: center;
   column-gap: 15px;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   justify-content: left;
 }
 
@@ -204,6 +204,17 @@ main {
   justify-items: center;
   align-items: center;
 }
+
+#deck-search-bar {
+  height: 70%;
+  display: grid;
+  grid-template-columns: auto 35px;
+}
+
+#deck-search-bar > input {
+  padding: 0 5px;
+}
+
 .btn {
   cursor: pointer;
   text-decoration: none;
@@ -247,7 +258,6 @@ h1 > input {
 
 .deck-cards>.deck-card:first-child {
   border-top: none;
-  grid-template-columns: 1fr 1fr 20px 20px;
 }
 
 .deck-card {
@@ -268,6 +278,10 @@ h1 > input {
   height: 150px;
   padding: 5px;
   font-family: monospace;
+}
+
+.deck-card *:nth-child(3n+3), *:nth-child(4n+4), *:nth-child(5n+5)  {
+  justify-self: center;
 }
 
 .deck-card.is-editing {

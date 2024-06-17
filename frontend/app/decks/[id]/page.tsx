@@ -104,11 +104,6 @@ export default function Page() {
         }
     }
 
-
-    useEffect(() => {
-        searchCards(searchCardsPrompt);
-    }, [searchCardsPrompt]);
-
     return (
         <div>
             <div className='deck-header'>
@@ -128,6 +123,7 @@ export default function Page() {
                                 type="text"
                                 spellCheck='false' 
                                 onChange={(e) => setSearchCardsPrompt(e.target.value)}
+                                onKeyUp={(e) => e.key == 'Enter' ? searchCards(searchCardsPrompt) : null}
                             />
                             <button onClick={() => searchCards(searchCardsPrompt)}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />

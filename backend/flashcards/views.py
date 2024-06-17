@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Q
+from haystack.query import SearchQuerySet, SQ
+from flashcards.utils import SearchQuerySetWrapper
 
 
 class FlashcardList(generics.ListCreateAPIView):
@@ -46,9 +48,9 @@ class CreateFlashcardForDeck(APIView):
 class SearchDeckFlashcards(APIView):
     def get(self, request, pk, *args, **kwargs):
         query = request.GET.get('q', '')
-        flashcards = Flashcard.objects.filter(
-            Q(deck_set__id=pk),
-            Q(question__icontains=query) | Q(answer__icontains=query),
+        flashcards = SearchQuerySet().filter(
+            SQ(decks=pk),
+            SQ(question_auto=query) | SQ(answer_auto=query),
         )
-        serializer = FlashcardSerializer(flashcards, many=True)
+        serializer = FlashcardSerializer(SearchQuerySetWrapper(flashcards), many=True)
         return Response(serializer.data)

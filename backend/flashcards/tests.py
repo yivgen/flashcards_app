@@ -2,6 +2,9 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from flashcards.views import *
 from flashcards.models import Flashcard
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 
 
 class FlashcardsAPITests(TestCase):
@@ -120,3 +123,52 @@ class DeckAPITests(TestCase):
         deck = Deck.objects.get(pk=deck.pk)
         self.assertEqual(deck.flashcards.first().question, 'This is a test question')
         self.assertEqual(deck.flashcards.first().answer, 'This is a test answer')
+
+class LearnDeckTests(TestCase):
+    def setUp(self) -> None:
+        self.factory = APIRequestFactory()
+
+    def test_remember_time_range(self):
+        deck = Deck.objects.create(name='Test deck')
+        card1 = Flashcard.objects.create(
+            question="Question 1",
+            answer="Answer 1",
+            lastTimeRememberedAt=timezone.now()
+        )
+        card2 = Flashcard.objects.create(
+            question="Question 2",
+            answer="Answer 2",
+            lastTimeRememberedAt=timezone.now() - settings.FLASHCARD_REMEMBER_TIME
+        )
+        deck.flashcards.add(card1, card2)
+        deck.save()
+
+        request = self.factory.get(f'/api/decks/{deck.pk}/get_cards_to_learn/')
+        response = GetCardsToLearnFromDeck.as_view()(request, pk=deck.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0].get('id'), card2.id)
+
+    def test_all_cards_in_remember_time_range(self):
+        deck = Deck.objects.create(name='Test deck')
+        card1 = Flashcard.objects.create(
+            question="Question 1",
+            answer="Answer 1",
+            lastTimeRememberedAt=timezone.now()
+        )
+        card2 = Flashcard.objects.create(
+            question="Question 2",
+            answer="Answer 2",
+            lastTimeRememberedAt=timezone.now()
+        )
+        deck.flashcards.add(card1, card2)
+        deck.save()
+
+        request = self.factory.get(f'/api/decks/{deck.pk}/get_cards_to_learn/')
+        response = GetCardsToLearnFromDeck.as_view()(request, pk=deck.pk)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0].get('id'), card1.id)
+        self.assertEqual(response.data[1].get('id'), card2.id)
